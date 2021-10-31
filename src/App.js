@@ -1,61 +1,53 @@
-import React, { Component } from 'react';
-import './App.css';
-import { Section } from './components/Section/Section';
-import { Statistics } from './components/Statistics/Statistics';
-import { FeedbackOptions } from './components/FeedbackOptions/FeedbackOptions';
-import { Notification } from './components/Notification/Notification';
+import React, { Suspense, lazy } from "react";
+import { Route, Switch } from "react-router-dom";
+import "./App.css";
+import Navigation from "./components/Navigation/Navigation";
+import Loader from "./components/Loader/Loader";
+import { Footer } from "./components/Footer/Footer";
+const HomePage = lazy(() =>
+  import("./views/HomePage" /* webpackChunkName: 'Home page'*/)
+);
+const SearchPage = lazy(() =>
+  import("./views/SearchPage" /* webpackChunkName: 'Search page'*/)
+);
+const NotFoundPage = lazy(() =>
+  import("./views/NotFoundPage" /* webpackChunkName: 'Page not found'*/)
+);
 
-class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+const MovieDetailPage = lazy(() =>
+  import("./views/MovieDetailPage" /* webpackChunkName: 'Movie detail page'*/)
+);
 
-  addFeedback = option => {
-    this.setState(state => ({
-      [option]: state[option] + 1,
-    }));
-  };
-
-  totalFeedback = () => {
-    return Object.values(this.state).reduce((acc, option) => acc + option, 0);
-  };
-
-  positiveFeedbackPercentage = () => {
-    const positiveFeedback =
-      Math.round((this.state.good / this.totalFeedback()) * 100) || 0;
-    return positiveFeedback;
-  };
-
-  render() {
-    const { good, neutral, bad } = this.state;
-    const totalFeedback = this.totalFeedback();
-    const positivePercentage = this.positiveFeedbackPercentage();
-    return (
-      <div className="container">
-        <Section>
-          <FeedbackOptions
-            options={Object.keys(this.state)}
-            onLeaveFeedback={this.addFeedback}
-          />
-        </Section>
-        <Section title="Statistics">
-          {totalFeedback ? (
-            <Statistics
-              good={good}
-              neutral={neutral}
-              bad={bad}
-              total={totalFeedback}
-              positivePercentage={positivePercentage}
-            ></Statistics>
-          ) : (
-            <Notification />
-          )}
-        </Section>
-      </div>
-    );
-  }
-}
+const App = () => {
+  return (
+    <div className="App">
+      <header>
+        <Navigation />
+      </header>
+      <Suspense fallback={<Loader />}>
+        <Switch>
+          <Route exact path="/">
+            <HomePage />
+          </Route>
+          <Route exact path="/search">
+            <SearchPage />
+          </Route>
+          <Route path="/movie/:movieId">{<MovieDetailPage />}</Route>
+          <Route component={NotFoundPage} />
+        </Switch>
+      </Suspense>
+      <footer>
+        <Footer />
+      </footer>
+    </div>
+  );
+};
 
 export default App;
+
+// {/*
+// {routes.map(({ exact, path, component, id }) => {
+//   return (
+//     <Route exact={exact} path={path} component={component} key={id} />
+//   );
+// })} */}

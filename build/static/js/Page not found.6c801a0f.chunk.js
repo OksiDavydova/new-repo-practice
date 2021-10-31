@@ -1,0 +1,2 @@
+(this["webpackJsonpgoit-react-hw-04-movies"]=this["webpackJsonpgoit-react-hw-04-movies"]||[]).push([[4],{114:function(t,e,n){"use strict";n.r(e),n.d(e,"default",(function(){return o}));n(0);var i=n(1);function o(){return Object(i.jsx)("h2",{children:" 404 page not found"})}}}]);
+//# sourceMappingURL=Page not found.6c801a0f.chunk.js.map
