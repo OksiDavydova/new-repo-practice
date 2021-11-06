@@ -18,9 +18,9 @@ export async function fetchMovies(url = "", config = "") {
 }
 
 //список самых популярных фильмов на сегодня для создания коллекции на главной странице
-export function fetchMoviesByTrending(page) {
+export function fetchMoviesByTrending() {
   return fetchMovies(
-    `/trending/movie/day?api_key=${API_KEY}&language=en-US&page=${page}&include_adult=false`
+    `/trending/movie/day?api_key=${API_KEY}&language=en-US&page=1&include_adult=false`
   );
 }
 

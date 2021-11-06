@@ -1,44 +1,40 @@
-import React, { Suspense, lazy } from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { Suspense } from "react";
+import { Routes, Route, NavLink } from "react-router-dom";
+import { routes } from "./routes";
 import "./App.css";
-import Navigation from "./components/Navigation/Navigation";
-import Loader from "./components/Loader/Loader";
-import { Footer } from "./components/Footer/Footer";
-const HomePage = lazy(() =>
-  import("./views/HomePage" /* webpackChunkName: 'Home page'*/)
-);
-const SearchPage = lazy(() =>
-  import("./views/SearchPage" /* webpackChunkName: 'Search page'*/)
-);
-const NotFoundPage = lazy(() =>
-  import("./views/NotFoundPage" /* webpackChunkName: 'Page not found'*/)
-);
 
-const MovieDetailPage = lazy(() =>
-  import("./views/MovieDetailPage" /* webpackChunkName: 'Movie detail page'*/)
-);
+// const HomePage = lazy(() =>
+//   import("./views/HomePage" /* webpackChunkName: 'Home page'*/)
+// );
+
+// const NotFoundPage = lazy(() =>
+//   import("./views/NotFoundPage" /* webpackChunkName: 'Page not found'*/)
+// );
+
+// const MovieDetailPage = lazy(() =>
+//   import("./views/MovieDetailPage" /* webpackChunkName: 'Movie detail page'*/)
+// );
 
 const App = () => {
   return (
     <div className="App">
       <header>
-        <Navigation />
+        <ul>
+          <li>
+            <NavLink to="/"> Home Page</NavLink>
+          </li>
+          <li>
+            <NavLink to="/movie/*"> Movie detail Page</NavLink>
+          </li>
+        </ul>
       </header>
-      <Suspense fallback={<Loader />}>
-        <Switch>
-          <Route exact path="/">
-            <HomePage />
-          </Route>
-          <Route exact path="/search">
-            <SearchPage />
-          </Route>
-          <Route path="/movie/:movieId">{<MovieDetailPage />}</Route>
-          <Route component={NotFoundPage} />
-        </Switch>
+      <Suspense fallback={<h1>Loading....</h1>}>
+        <Routes>
+          {routes.map(({ path, id, component: Component }) => (
+            <Route key={id} path={path} element={<Component />} />
+          ))}
+        </Routes>
       </Suspense>
-      <footer>
-        <Footer />
-      </footer>
     </div>
   );
 };
@@ -51,3 +47,10 @@ export default App;
 //     <Route exact={exact} path={path} component={component} key={id} />
 //   );
 // })} */}
+
+// {/* <Route exact path="/">
+//   <HomePage />
+// </Route>
+
+// <Route path="/movie/:movieId">{<MovieDetailPage />}</Route>
+// <Route component={NotFoundPage} /> */}
